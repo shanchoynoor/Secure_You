@@ -223,6 +223,24 @@ select:focus {
 
 .lock-toggle {
   margin: 24px 0;
+  display: flex;
+  gap: 12px;
+}
+
+.btn-instant-lock {
+  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  flex: 1;
+}
+
+.btn-instant-lock:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(237, 137, 54, 0.4);
 }
 
 .settings-section {

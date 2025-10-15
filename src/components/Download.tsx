@@ -15,11 +15,18 @@ const Download: React.FC = () => {
         
         <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 mb-8">
           <div className="space-y-4">
-            <button 
-              onClick={() => window.open('https://github.com', '_blank')}
+            <button
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/dist.zip'; // Path to the ZIP file
+                link.download = 'BrowserLockPro.zip';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
               className="w-full bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition-all transform hover:scale-105 shadow-xl"
             >
-              📦 Download from GitHub
+              📦 Download Browser Lock Pro
             </button>
             
             <button 

@@ -123,10 +123,10 @@ document.getElementById('setupPassword')?.addEventListener('input', (e) => {
 document.getElementById('lockBtn')?.addEventListener('click', async () => {
   const data = await chrome.storage.local.get(['isLocked']);
   const newLockState = !data.isLocked;
-  
+
   await chrome.storage.local.set({ isLocked: newLockState });
   chrome.runtime.sendMessage({ action: 'toggleLock', isLocked: newLockState });
-  
+
   if (newLockState) {
     showScreen('unlockScreen');
   } else {
@@ -134,12 +134,19 @@ document.getElementById('lockBtn')?.addEventListener('click', async () => {
   }
 });
 
+// Instant lock button
+document.getElementById('instantLockBtn')?.addEventListener('click', async () => {
+  await chrome.storage.local.set({ isLocked: true });
+  chrome.runtime.sendMessage({ action: 'toggleLock', isLocked: true });
+  showScreen('unlockScreen');
+});
+
 // Unlock browser
 document.getElementById('unlockBtn')?.addEventListener('click', async () => {
   const password = document.getElementById('unlockPassword').value;
   const hash = await hashPassword(password);
   const data = await chrome.storage.local.get(['passwordHash']);
-  
+
   if (hash === data.passwordHash) {
     await chrome.storage.local.set({ isLocked: false });
     chrome.runtime.sendMessage({ action: 'toggleLock', isLocked: false });
@@ -150,9 +157,17 @@ document.getElementById('unlockBtn')?.addEventListener('click', async () => {
   } else {
     const errorEl = document.getElementById('unlockError');
     const inputEl = document.getElementById('unlockPassword');
-    errorEl.textContent = 'Incorrect password';
+    errorEl.textContent = '❌ Incorrect password - try again';
     inputEl.classList.add('shake');
-    setTimeout(() => inputEl.classList.remove('shake'), 400);
+    inputEl.style.borderColor = '#e53e3e';
+    inputEl.style.backgroundColor = '#fed7d7';
+    setTimeout(() => {
+      inputEl.classList.remove('shake');
+      inputEl.style.borderColor = '#e53e3e';
+      inputEl.style.backgroundColor = '#fef5e7';
+    }, 400);
+    // Focus back on input for convenience
+    inputEl.focus();
   }
 });
 
